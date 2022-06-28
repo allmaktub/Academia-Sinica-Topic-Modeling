@@ -6,8 +6,6 @@ library(sysfonts)
 font_add_google("Noto Sans TC", "Noto Sans TC")
 library(showtext)
 showtext_auto()
-library(jiebaR)
-
 
 ####################################################################################
 ## Creating DFMs                                                                  ##
@@ -229,6 +227,8 @@ validation_df <- topic_df %>%
 write.csv(validation_df, "topic_validation.csv")
 
 ######################### Word Intrusion Test ##############################
+
+# Note some OS might fail to install this package, 
 # install.packages("oolong")
 library(oolong)
 
