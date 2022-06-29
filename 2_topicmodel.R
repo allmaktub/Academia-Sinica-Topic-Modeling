@@ -6,6 +6,7 @@ library(sysfonts)
 font_add_google("Noto Sans TC", "Noto Sans TC")
 library(showtext)
 showtext_auto()
+library(jiebaR)
 
 ####################################################################################
 ## Creating DFMs                                                                  ##
@@ -224,7 +225,15 @@ validation_df <- topic_df %>%
   group_by(topic) %>% 
   slice_sample(n = 10, replace = TRUE)
 
-write.csv(validation_df, "topic_validation.csv")
+# write.csv(validation_df, "topic_validation_random.csv")
+
+
+# Get Top Texts of each Topics
+doc_gamma <- tidy(lda_model, matrix = "gamma")
+gamma_df <- doc_gamma %>% group_by(topic) %>% arrange(desc(gamma)) %>% top_n(10) %>% arrange(topic)
+gamma_df <- left_join(gamma_df, select(topic_df, doc_name, text, URL), by = c("document" = "doc_name"))
+
+#write.csv(gamma_df, "topic_validation_gamma.csv")
 
 ######################### Word Intrusion Test ##############################
 
