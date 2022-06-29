@@ -66,6 +66,7 @@ data.frame(list(term = names(features), frequency = unname(features))) %>% # Cre
 # Wordcloud
 textplot_wordcloud(dfm_ukraine)
 
+
 ####################################################################################
 ## Keyword Analysis                                                               ##
 ####################################################################################
