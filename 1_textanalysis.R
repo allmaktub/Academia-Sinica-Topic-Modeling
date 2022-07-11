@@ -1,3 +1,10 @@
+# install.packages("tidyverse")
+# install.packages("quanteda")
+# install.packages("quanteda.textplots")
+# install.packages("quanteda.textstats")
+# install.packages("sysfonts")
+# install.packages("showtext")
+
 library(tidyverse)
 library(quanteda)
 library(quanteda.textplots)
@@ -139,7 +146,6 @@ print(tokens(text), max_ntoken = 100)
 # Jieba is one of the most widely used packages for tokenisation
 # One advantage of using Jieba is that you can add your own words into the dictionary
 
-# install.packages("jiebaR")
 library(jiebaR)
 
 # Vanila version

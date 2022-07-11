@@ -1,3 +1,16 @@
+# install.packages("topicmodels")
+# install.packages("quanteda")
+# install.packages("tidyverse")
+# install.packages("tidytext")
+# install.packages("lubridate")
+# install.packages("sysfonts")
+# install.packages("showtext")
+# install.packages("jiebaR")
+# install.packages("servr")
+# install.packages("ldatuning")
+# install.packages("doParallel")
+# install.packages("reshape2")
+
 library(topicmodels)
 library(quanteda)
 library(tidyverse)
@@ -7,6 +20,7 @@ font_add_google("Noto Sans TC", "Noto Sans TC")
 library(showtext)
 showtext_auto()
 library(jiebaR)
+library(tidytext)
 
 ####################################################################################
 ## Creating DFMs                                                                  ##
@@ -48,7 +62,6 @@ lda_data
 ####################################################################################
 
 ######################### LDA Tuning ######################### 
-# install.packages("ldatuning")
 library("ldatuning")
 
 ldatuning.result <- FindTopicsNumber(
@@ -143,9 +156,10 @@ get_terms(lda_model, k=20)
 
 
 ####################################################################################
-##  Visualize Terms                                                               ##
+##  Visualization                                                                 ##
 ####################################################################################
 
+######################### Visualize Terms ##############################
 library(tidytext)
 library(tidyr)
 
@@ -198,7 +212,19 @@ topicmodels_json_ldavis <- function(fitted, dfm, dtm){
 }
 
 json_lda <- topicmodels_json_ldavis(lda_model, visdfm, lda_data)
-serVis(json_lda, open.browser = TRUE)
+serVis(json_lda, out.dir = "LDAvis", open.browser = TRUE)
+
+
+######################### Topic Proportion per Document ##############################
+doc_gamma <- tidy(lda_model, matrix = "gamma")
+
+doc_gamma %>%
+  filter(document %in% c("text1","text2","text3","text4","text5","text6")) %>% 
+  ggplot(aes(factor(topic), gamma, fill = factor(topic))) +
+  geom_col() +
+  facet_wrap(~ document) +
+  labs(x = "topic", y = expression(gamma))
+
 
 
 ####################################################################################
@@ -282,6 +308,11 @@ topic_df %>%
 
 # In some cases, it might be useful to visualize a topic model as a network
 # A use case can be found: https://doi.org/10.1111/nana.12805
+
+# install.package("igraph")
+# install.package("ggnewscale")
+# install.package("ggnetwork")
+# install.package("RColorBrewer")
 
 library(igraph)
 library(ggnewscale)
