@@ -12,6 +12,7 @@ install.packages("quanteda.textplots")
 install.packages("quanteda.textstats")
 install.packages("sysfonts")
 install.packages("showtext")
+install.packages("jiebaR")
 
 library(tidyverse)
 library(quanteda)
