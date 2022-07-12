@@ -5,3 +5,4 @@
 tw_data_gen.R
 *.Rproj
 *.png
+.DS_Store
