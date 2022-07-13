@@ -10,6 +10,8 @@ install.packages("servr")
 install.packages("ldatuning")
 install.packages("doParallel")
 install.packages("reshape2")
+install.packages("caret")
+
 
 library(topicmodels)
 library(quanteda)
@@ -250,9 +252,40 @@ topic_df$topic <- as.factor(topic_df$topic)
 validation_df <- topic_df %>% 
   group_by(topic) %>% 
   slice_sample(n = 10, replace = TRUE)
+write.csv(validation_df, "topic_validation_random.csv")
 
-# write.csv(validation_df, "topic_validation_random.csv")
+# One more step, coding texts into topics and analyse with confusion matrix
+validation_sample <- topic_df %>% 
+  select(topic, text) %>% 
+  group_by(topic) %>% 
+  slice_sample(n = 2, replace = TRUE) %>% 
+  ungroup()
 
+validation_sample <- validation_sample[sample(1:nrow(validation_sample)), ]
+validation_sample$no <- 1:nrow(validation_sample)
+validation_coding <- select(validation_sample, no, text)
+
+saveRDS(validation_sample, "validation_sample.rds")
+write.csv(validation_sample, "validation_sample.csv", row.names = FALSE)
+write.csv(validation_coding, "validation_coding.csv", row.names = FALSE)
+
+# Do this after coding
+validation_coded <- read.csv("validation_coding_coded.csv")
+validation <- left_join(validation_sample, validation_coded, by = "no")
+
+# Confusion Matrix
+library(caret)
+validation$code <- factor(validation$code)
+validation$topic <- factor(validation$topic, levels = levels(validation$code))
+confusionMatrix(validation$topic, validation$code)
+
+# Getting Accuracy
+validation <- mutate(validation, correct = ifelse(topic == code, 1, 0))
+validation$correct[is.na(validation$correct)] <- 0
+validation %>% 
+  group_by(topic) %>% 
+  summarise(acc = mean(correct)) %>% 
+  View()
 
 # Get Top Texts of each Topics
 doc_gamma <- tidy(lda_model, matrix = "gamma")
