@@ -104,7 +104,7 @@ textplot_keyness(tstat_key)
 ####################################################################################
 
 # Lexicon approach is a powerful approach to identify word-of-interest in your corpus
-# However, the quality of your analysis depends heavily on the quality of your lexica
+# However, the quality of your analysis depends heavily on the quality of your lexicons
 # It also depends on the topic of interest, some topics are inherently easier 
 # to come up with a list of lexicon while others are more difficult to capture by default
 
