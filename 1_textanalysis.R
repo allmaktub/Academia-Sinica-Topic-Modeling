@@ -214,8 +214,16 @@ tokens_ios <- tokens(corpus_ios,
                      verbose = TRUE)
 dfm_ios <- dfm(tokens_ios)
 
-customstopwords <- c("與", "年", "月", "日")
 
+features <- topfeatures(dfm_ios, 100)  # Putting the top 100 words into a new object
+data.frame(list(term = names(features), frequency = unname(features))) %>% # Create a data.frame for ggplot
+  ggplot(aes(x = reorder(term,-frequency), y = frequency)) + # Plotting with ggplot2
+  geom_point() +
+  theme_bw() +
+  labs(x = "Term", y = "Frequency") +
+  theme(axis.text.x=element_text(angle=90, hjust=1))
+
+customstopwords <- c("與", "年", "月", "日")
 dfm_ios <- dfm_remove(dfm_ios, c(stopwords('chinese', source = "misc"), stopwords('english'), customstopwords))
 
 # Inspecting the results again
